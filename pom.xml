@@ -42,5 +42,6 @@
   		<module>chapter03</module>
   		<module>practice01</module>
   		<module>helloworld</module>
+  		<module>practice02</module>
   	</modules>
 	</project>
