@@ -7,7 +7,7 @@ public class Prob05 {
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner( System.in );
-
+		System.out.println("수를 ");
 		while( true ) {
 			
 			/* 게임 작성 */

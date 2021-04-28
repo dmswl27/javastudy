@@ -5,6 +5,15 @@ public class Goods2 {
 	private int price;
 	private int countSold;
 	private int countStock;
+	
+	public Goods2() {}
+	public Goods2(String name, int price, int countSold, int countStock) {
+		this.name = name;
+		this.price = price;
+		this.countSold = countSold;
+		this.countStock = countStock;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -41,5 +50,11 @@ public class Goods2 {
 						
 				);
 	}
+	
+	public int calc(double rate) {
+		// TODO Auto-generated method stub
+		return (int)(price*rate);
+	}
+	
 
 }
