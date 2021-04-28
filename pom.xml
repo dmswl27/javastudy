@@ -43,5 +43,8 @@
   		<module>practice01</module>
   		<module>helloworld</module>
   		<module>practice02</module>
+  		<module>parctice03</module>
+  		<module>practice04</module>
+  		<module>practice05</module>
   	</modules>
 	</project>
