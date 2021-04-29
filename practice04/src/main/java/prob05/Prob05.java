@@ -10,3 +10,5 @@ public class Prob05 {
 		base.service("오후"); 
 	}
 }
+
+

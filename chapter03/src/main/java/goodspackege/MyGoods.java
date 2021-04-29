@@ -8,6 +8,7 @@ public class MyGoods extends Goods {
 	public float getDiscountPrice() {
 		// propacted 자식에서 접근할 수 있다.
 		return  (price * discountRate);
+		
 	}
 
 }

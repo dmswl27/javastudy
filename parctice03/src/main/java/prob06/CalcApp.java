@@ -9,6 +9,7 @@ public class CalcApp {
 		
 		while( true ) {
 			/*  코드를 완성 합니다 */
+			System.out.println( "실행 결과 :  " );
 			System.out.print( ">> " );
 			String expression = scanner.nextLine();
 			

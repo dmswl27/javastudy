@@ -17,3 +17,4 @@ public class Base {
 		System.out.println("night");
 	}
 }
+

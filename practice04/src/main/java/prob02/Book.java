@@ -1,6 +1,7 @@
 package prob02;
 
 public class Book {
+	
 	private int bookNo;
 	private String title;
 	private String author;
@@ -16,7 +17,8 @@ public class Book {
 	}
 	
 	public void displayBookInfo( String title, String author,int stateCode ) {
-		for(int i = 0; i<books.lenght;i++) {
+		
+		for(int i = 0; i<books.lenght();i++) {
 			System.out.println("책 제목:" + books[i].title + ", 작가:" + author + ", 대여 유무:" + stateCode);
 	}
 	public void rent() {
