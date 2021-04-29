@@ -1,6 +1,8 @@
-package point;
+package com.douzone.paint.point;
 
-public class Point {
+import com.douzone.paint.i.Drawable;
+
+public class Point implements Drawable{
 	private int x;
 	private int y;
 	
@@ -33,6 +35,11 @@ public class Point {
 			show();
 		}else
 			System.out.println("점[" + x + "," + y +"]에 점을 지웠습니다");
+	}
+	@Override
+	public void draw() {
+		show();
+		
 	}
 
 }
