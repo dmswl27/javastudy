@@ -26,4 +26,14 @@ public class MyStack {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String pop() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
