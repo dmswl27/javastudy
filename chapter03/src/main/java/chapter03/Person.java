@@ -1,4 +1,4 @@
-package goods;
+package chapter03;
 
 public class Person {
 	private String name;

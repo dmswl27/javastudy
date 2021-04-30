@@ -1,4 +1,4 @@
-package goods;
+package chapter03;
 
 import javax.management.loading.PrivateClassLoader;
 

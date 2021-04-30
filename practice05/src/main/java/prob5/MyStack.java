@@ -1,39 +1,46 @@
 package prob5;
 
-import java.awt.Component.BaselineResizeBehavior;
 
-public class MyStack {
-	private String[] data;
-	private int top = -1;
+public class MyStack<T> {
+	private int top;
+	private T[] buffer;
 	
-	public MyStack(int size) {
-		data = new String[size];
+	@SuppressWarnings("unchecked")
+	public MyStack(int capacity) {
+		top = -1;
+		buffer = (T[])new Object[capacity];
 	}
 	
-	public MyStack(int size) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public void push(String data) {
-		if(data.length() == top) {
+	public void push(T s) {
+		if(top == buffer.length - 1) {
 			resize();
 		}
-		top++;
+		
+		buffer[++top] = s;
 	}
 
-	// public String pop 
-	private void resize() {
-		// TODO Auto-generated method stub
+	public T pop() throws MyStackException {
+		if(isEmpty()) {
+			throw new MyStackException("stack is empty");
+		}
 		
+		T result = buffer[top];
+		buffer[top--] = null;
+		
+		return result;
 	}
 
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return top == -1;
 	}
-
-	public String pop() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	@SuppressWarnings("unchecked")
+	private void resize() {
+		T[] temp = (T[])new Object[buffer.length*2];
+		for(int i = 0; i <= top; i++) {
+			temp[i] = buffer[i];
+		}
+		
+		buffer = temp;
+	}	
 }

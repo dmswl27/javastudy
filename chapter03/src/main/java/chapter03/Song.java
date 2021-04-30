@@ -1,4 +1,4 @@
-package goods;
+package chapter03;
 
 public class Song {
 	private String title;

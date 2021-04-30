@@ -1,5 +1,6 @@
 package prob3;
 
+
 public class Prob2 {
 	public static void main(String[] args) {
 		Bird bird01 = new Duck();
@@ -9,7 +10,7 @@ public class Prob2 {
 		System.out.println( bird01 );
 		
 		Bird bird02 = new Sparrow();
-		bird02.setName( "짹짹이" );
+		bird02.setName( "짹짹" );
 		bird02.fly();
 		bird02.sing();
 		System.out.println( bird02 );
