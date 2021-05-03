@@ -13,8 +13,8 @@ public class CurrencyConverter {
 		return dollar*rate;
 	      // 달러를 한국 원화로 변환
 	}
-	public static void setRate(double r) {
-	    rate = r;   
+	public static void setRate(double rate) {
+		CurrencyConverter.rate = rate;   
 		// 환율 설정(KRW/$1)
 	}
 	

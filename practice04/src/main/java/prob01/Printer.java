@@ -18,6 +18,10 @@ public class Printer {
 //		System.out.println(t);
 //	}
 
+	public <T> void println(T t) {
+		System.out.println(t);
+	}
+
 	public <T> void println(T... ts) {
 		for(T t : ts) {
 			System.out.print(t);
@@ -26,7 +30,7 @@ public class Printer {
 		System.out.print("\n");
 	}
 	
-	public int sum(Integer... nums) {
+	public int sum(int... nums) {
 		Integer sum = 0;
 		for(Integer i : nums) {
 			sum += i;

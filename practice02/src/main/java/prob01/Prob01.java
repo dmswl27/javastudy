@@ -14,7 +14,7 @@ public class Prob01 {
 		for(int i=0;i<MONEYS.length;i++){
 			count = coin/MONEYS[i];
 			coin = coin%MONEYS[i];
-			System.out.println(MONEYS[i]+"원 "+ count);
+			System.out.println(MONEYS[i]+"원 "+ count + "개");
 		}
 			
 		

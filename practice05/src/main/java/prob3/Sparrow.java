@@ -2,17 +2,7 @@ package prob3;
 
 public class Sparrow  extends Bird{
 
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return super.getName();
-	}
-
-	@Override
-	public void setName(String name) {
-		super.setName(name);
-		
-	}
+	
 
 	@Override
 	protected void fly() {

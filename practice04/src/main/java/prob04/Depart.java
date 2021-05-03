@@ -2,8 +2,6 @@ package prob04;
 
 public class Depart extends Employee {
 	private String department;
-	public Depart() {
-	}
 	public Depart(String name, int salary, String department ) {
 		super.setName(name);
 		super.setSalary(salary);

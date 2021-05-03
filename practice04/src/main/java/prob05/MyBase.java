@@ -6,23 +6,20 @@ public class MyBase extends Base {
 	public MyBase() {
 		
 	}
-	public void aftern(){
+	public void afternoon(){
 		System.out.println("오후도 낮과 마찬가지로 일해야 합니다.");
 	}
 
 	@Override
 	public void service(String state) {
-		if( state.equals( "낮" ) ) {
-			day();
-		} 
-		if( state.equals( "밤" ) ) {
-			night();
-		} 
-		if( state.equals( "오후" ) ) {
-			aftern();
+		if ("오후".equals(state)) {
+			afternoon();
+			return;
 		}
-		
+
+		super.service(state);
 	}
+
 
 	@Override
 	public void day() {

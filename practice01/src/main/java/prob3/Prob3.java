@@ -5,26 +5,21 @@ import java.util.Scanner;
 public class Prob3 {
 	
 	public static void main(String[] args) {
-
 		Scanner scanner = new Scanner(System.in);
-		System.out.print("숫자를 입력하세요:");
-		int num =scanner.nextInt();
-		int total = 0;
-		if(num%2==0) {
-			for(int i=2;i<=num;i=i+2) {
-				
-				total+=i;
+
+		while(true) {
+			System.out.print("수를 입력 하세요 : ");
+
+			int number = scanner.nextInt();
+			int sum = 0;
+
+			for(int i = 0; i <= number; i++) {
+				if(number % 2 == 0 && i % 2 == 0 || number % 2 != 0 && i % 2 != 0) {
+					sum += i;
+				}
 			}
-			System.out.println("결과 값 : "+total);
+
+			System.out.println("결과값: " + sum);
 		}
-		if(num%2==1) {
-			for(int i=1;i<=num;i=i+2) {
-				total+=i;
-			}
-			System.out.println("결과 값 : "+total);
-		}
-	scanner.close();
-		/* 코드 작성 */
-		
 	}
 }

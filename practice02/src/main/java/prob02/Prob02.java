@@ -15,7 +15,7 @@ public class Prob02 {
 		}
 
 		for(int j=0;j<intArray.length;j++) {
-			sum= sum + intArray[j];	
+			sum += intArray[j];	
 		}
 		System.out.println("평균운"+ sum/5 +"입니다");
 		

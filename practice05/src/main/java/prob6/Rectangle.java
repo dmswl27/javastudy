@@ -1,10 +1,29 @@
 package prob6;
 import java.util.*;
 
-public class Rectangle implements Resizable {
+public class Rectangle  extends Shape implements Resizable {
 
-	public Rectangle(double i, double j) {
-		// TODO Auto-generated constructor stub
+	private double width;
+	private double height;
+
+	public Rectangle(double width, double height) {
+		this.width = width;
+		this.height = height;
 	}
 
+	@Override
+	public void resize(double rate) {
+		width *= rate;
+		height *= rate;
+	}
+
+	@Override
+	public double getArea() {
+		return width * height;
+	}
+
+	@Override
+	public double getPerimeter() {
+		return (width + height) * 2;
+	}
 }
