@@ -1,13 +1,20 @@
 package httpd;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream.GetField;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class RequestHandler extends Thread {
 	private static final String DOCUMENTROOT = "./webapp";
@@ -55,9 +62,22 @@ public class RequestHandler extends Thread {
 			if("GET".equals(tokens[0])) {
 				consoleLog("request:" + tokens[1]);
 				responseStaticResource(os, tokens[1], tokens[2]);
+				
+				System.out.println("궁금 : " +tokens[0] + "  "+ tokens[1] + "    "+ tokens[2]);
 			} else { // methods: POST, PUT, DELETE, HEAD, CONNECT
-				/* Simple Http Server 에서는 무시 */
-			
+				/* Simple Http Server 에서는 무시 */	
+				File file = new File(DOCUMENTROOT + tokens[1]);
+				String contentType = Files.probeContentType(file.toPath());	
+				FileInputStream fin = new FileInputStream("./webapp/error/400.html");
+	    
+			    os.write((tokens[2] + " 400 Bas Request\r\n").getBytes("UTF-8"));
+				os.write(("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ));
+				os.write("\r\n".getBytes() );
+			    while(true){
+		        int data = fin.read();
+		        if(data == -1) break;
+		        os.write(data);
+		        }
 				// 응답 예시
 				// HTTP/1.1 400 Bas Request\r\n
 				// Content-Type:text/html; charset=utf-8\r\n
@@ -93,6 +113,8 @@ public class RequestHandler extends Thread {
 		String url,
 		String protocol) throws IOException {
 		
+		System.out.println("너무 궁금 " +os + "    " + url + "   " + protocol);
+		
 		// welcome file set
 		if("/".equals(url)) {
 			url = "/index.html";
@@ -100,6 +122,20 @@ public class RequestHandler extends Thread {
 		
 		File file = new File(DOCUMENTROOT + url);
 		if(file.exists() == false) {
+			String contentType = Files.probeContentType(file.toPath());	
+			
+			FileInputStream fin = new FileInputStream("./webapp/error/404.html");
+    
+		    os.write((protocol + " 404 File Not Found\r\n").getBytes("UTF-8"));
+			os.write(("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ));
+			os.write("\r\n".getBytes() );
+		    while(true){
+	        int data = fin.read();
+	        if(data == -1) break;
+	        os.write(data);
+	        }
+					  
+			//os.write(os, url, protocol);
 			// 응답 예시
 			// HTTP/1.1 404 File Not Found\r\n
 			// Content-Type:text/html; charset=utf-8\r\n
@@ -112,7 +148,7 @@ public class RequestHandler extends Thread {
 		
 		// nio
 		byte[] body = Files.readAllBytes(file.toPath());
-		String contentType = Files.probeContentType(file.toPath());
+		String contentType = Files.probeContentType(file.toPath());		
 		os.write((protocol + " 200 OK\r\n").getBytes("UTF-8"));
 		os.write(("Content-Type:" + contentType + "; charset=utf-8\r\n").getBytes( "UTF-8" ));
 		os.write("\r\n".getBytes() );

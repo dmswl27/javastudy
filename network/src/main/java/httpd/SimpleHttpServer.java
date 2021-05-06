@@ -7,7 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SimpleHttpServer {
-	private static final int PORT = 8888;
+	private static final int PORT = 8880;
 
 	public static void main(String[] args) {
 
@@ -25,7 +25,7 @@ public class SimpleHttpServer {
 				// 3. Wait for connecting ( accept )
 				Socket socket = serverSocket.accept();
 
-				// 4. Delegate Processing Request ..위임
+				// 4. Delegate Processing Request ..위
 				new RequestHandler(socket).start();
 			}
 

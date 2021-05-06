@@ -1,5 +1,7 @@
 package chat;
 
-public class ChatCilentThread extends Thread {
+import java.io.BufferedReader;
 
+public class ChatCilentThread extends Thread {
+	private BufferedReader br;
 }
