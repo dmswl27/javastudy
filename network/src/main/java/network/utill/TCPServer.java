@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 public class TCPServer {
 
@@ -16,6 +17,10 @@ public class TCPServer {
 		try {
 			// 1. 서버소켓 생성
 			serverSocket = new ServerSocket();
+			
+			//1.1 Time Wait 상태에서 소켓에 포트 번호를 할당이 가능하게 하기 위해서...
+			serverSocket.setReuseAddress(true);
+			
 			
 			// 2. 바인딩(Binding)
 			//    Socket에 InetSocketAddress(IPAddress + Port)
@@ -52,6 +57,14 @@ public class TCPServer {
 				
 					// 5. 데이터 쓰기
 					os.write(data.getBytes("utf-8"));
+					// 6. 데이터 쓰기
+					
+					try {
+						Thread.sleep(2000);
+						os.write(data.getBytes("utf-8"));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			} catch(SocketException e) {
 				System.out.println("[server] suddenly closed by client");
