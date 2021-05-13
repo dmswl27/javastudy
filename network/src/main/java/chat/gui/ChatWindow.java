@@ -1,6 +1,6 @@
 package chat.gui;
+
 import java.awt.BorderLayout;
-import java.net.ConnectException;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Frame;
@@ -14,35 +14,43 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
+
+import javax.print.attribute.standard.DateTimeAtCompleted;
 
 public class ChatWindow {
-	public static final int PORT = 9000;
 
 	private Frame frame;
 	private Panel pannel;
 	private Button buttonSend;
 	private TextField textField;
 	private TextArea textArea;
+	private Socket socket;
+	private BufferedReader br;
+	private PrintWriter pw;
+	private String nickName;
 
-	public ChatWindow(String nickname  ) {
-		frame = new Frame(nickname);
+//	소켓
+	public ChatWindow(String nickName, Socket socket) {
+		frame = new Frame(nickName);
 		pannel = new Panel();
-		buttonSend = new Button("Send");
+		buttonSend = new Button("전송");
 		textField = new TextField();
 		textArea = new TextArea(30, 80);
-		
+		this.socket = socket;
+		this.nickName = nickName;
 	}
-	/*
-	 * UI 출력 건들지마
-	 * */
 
 	public void show() {
+		/*
+		 * 1. UI 초기화
+		 */
 		// Button
 		buttonSend.setBackground(Color.GRAY);
 		buttonSend.setForeground(Color.WHITE);
@@ -56,14 +64,13 @@ public class ChatWindow {
 		// Textfield
 		textField.setColumns(80);
 		textField.addKeyListener(new KeyAdapter() {
-
 			@Override
 			public void keyPressed(KeyEvent e) {
 				char keyCode = e.getKeyChar();
-				if(keyCode == KeyEvent.VK_ENTER)
+				if(keyCode == KeyEvent.VK_ENTER) {
 					sendMessage();
+				}
 			}
-			
 		});
 
 		// Pannel
@@ -79,139 +86,76 @@ public class ChatWindow {
 		// Frame
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				finish();
 			}
 		});
 		frame.setVisible(true);
 		frame.pack();
+		
+		/*
+		 * 2. IO 스트림 생성
+		 */
+		try {
+			br = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
+			pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), "utf-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		/*
+		 * 3. chat client thread 생성(receive thread)
+		 */
+		updateTextArea("환영합니다. 즐거운 채팅하세요.");
+		new ChatClientThread().start();
+	}
 	
-	/*
-	 * 2. IOSTREAM 생성
-	 * */
-	Socket socket = null; 
-    try { 
-         
-        socket = new Socket("0.0.0.0", PORT); // 소켓을 생성하여 연결을 요청한다.
-         System.out.println("서버에 연결되었습니다.");
+	private void finish() {
+		pw.println("quit:");
+		pw.flush();
+		System.exit(0);
+		try {
+			if(socket != null && socket.isClosed() == false) {
+				socket.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-        // 메시지 전송용 Thread 생성 
-         ClientSender sender = new ClientSender(socket);
-
-         /*
-     	 * 3. Chat Client Thread 생성 (receiver Thread)
-     	 * */
-     	
-        // 메시지 수신용 Thread 생성 
-        Thread receiver = new Thread(new ClientReceiver(socket));
-
-        receiver.start(); 
-    } catch (ConnectException ce) { 
-        ce.printStackTrace(); 
-    } catch (IOException e) {
-    	e.printStackTrace();
-    }
-    } 
-
-	
 	private void sendMessage() {
 		String message = textField.getText();
-		System.out.println("프로토콜 구현: " + message);
-		
+		if("quit".equals(message)) {
+			finish();
+			return;
+		}
+		pw.println("message:" + message);
+		pw.flush();
 		textField.setText("");
 		textField.requestFocus();
 	}
+	
 	private void updateTextArea(String message) {
+		if (message.contains(nickName)) { 
+			textArea.append("(나) ");
+		} 
 		textArea.append(message);
 		textArea.append("\n");
 	}
-	private class ChatClientTread extends Thread{
+	
+	private class ChatClientThread extends Thread {
 		@Override
 		public void run() {
-			Socket socket = null;
 			try {
-                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
-                while(true) {
-                    String msg = br.readLine();
-                    textArea.append(msg);
-                    textArea.append("\n");
-                }
-			}catch (IOException e) {
-                e.printStackTrace();
-            }
+				while(true) {
+					String line = br.readLine();
+					updateTextArea(line);
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-//		public void finish() {
-//			System.out.println("방 나가기");
-//			System.out.println("소켓 닫기");
-//			System.exit(0);
-//		}
 	}
-	class ClientSender { 
-        Socket socket; 
-        DataOutputStream out;
-		private String frame; 
-
-        ClientSender(Socket socket) { 
-            this.socket = socket; 
-
-            try { 
-                this.out = new DataOutputStream(socket.getOutputStream());
- 
-                // 시작하자 마자, 자신의 대화명을 서버로 전송 
-                if (out != null) {
-                     out.writeUTF(frame); 
-                } 
-
-            } catch (Exception e) {
-            	e.printStackTrace();
-            } 
-        } 
-
-        public void buttonSend(String message) {
-             if (out != null) {
-                 try { 
-                    // 키보드로 입력받은 데이터를 서버로 전송
-                     out.writeUTF("[" + frame + "] " + message);
-                 } catch (IOException e) { 
-                	 e.printStackTrace();
-                } 
-            } 
-        } 
-    } 
-
-    // 메시지 수신용 Thread 
-    class ClientReceiver implements Runnable {
-        Socket socket; 
-        DataInputStream in; 
-
-        // 생성자 
-        ClientReceiver(Socket socket) { 
-            this.socket = socket; 
-
-            try { 
-                // 서버로 부터 데이터를 받을 수 있도록 DataInputStream 생성
-                 this.in = new DataInputStream(socket.getInputStream());
-             } catch (IOException e) { 
-            	 e.printStackTrace();
-            } 
-        } 
-
-        public void run() {
-             while (in != null) { 
-                try { 
-                    // 서버로 부터 전송되는 데이터를 출력 
-                    ChatWindow.this.setMessage(in.readUTF());
-                 } catch (IOException e) { 
-                	 e.printStackTrace();
-                } 
-            } 
-        } 
-    }
-
-	public void setMessage(String readUTF) {
-		System.out.println("[" + frame + "] " + readUTF); 
-		
-	} 
-
-
-
 }

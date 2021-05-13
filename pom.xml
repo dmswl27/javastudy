@@ -49,5 +49,6 @@
   		<module>chapter04</module>
   		<module>finalTest</module>
   		<module>network</module>
+  		<module>webapp</module>
   	</modules>
 	</project>

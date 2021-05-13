@@ -17,8 +17,13 @@ import java.nio.file.Paths;
 
 
 public class RequestHandler extends Thread {
-	private static final String DOCUMENTROOT = "./webapp";
+//	private static final String DOCUMENTROOT = "./webapp";
+	private static String DOCUMENTROOT = "";
 	private Socket socket;
+	static {
+		DOCUMENTROOT = RequestHandler.class.getClass().getResource("./webapp").getPath();
+		System.out.println(DOCUMENTROOT);
+	}
 	
 	public RequestHandler( Socket socket ) {
 		this.socket = socket;
